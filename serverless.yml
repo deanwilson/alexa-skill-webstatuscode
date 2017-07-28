@@ -1,0 +1,13 @@
+service: webstatuscode
+
+provider:
+  name: aws
+  runtime: python2.7
+  region: eu-west-1
+
+functions:
+  WebStatusCode:
+    handler: handler.alexa_handler
+    description: "Lookup the meaning behind a HTTP status code. Built as part of an Alexa skill"
+    events:
+      - alexaSkill
