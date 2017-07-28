@@ -1,0 +1,8 @@
+WebStatusCode what is {StatusCode}
+WebStatusCode what's {StatusCode}
+
+# TODO make these work
+#WebStatusCode get {StatusCode}
+#WebStatusCode get status {StatusCode}
+#WebStatusCode get status code {StatusCode}
+#WebStatusCode get code {StatusCode}
