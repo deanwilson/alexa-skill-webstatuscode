@@ -3,9 +3,9 @@ def alexa_handler(event, context):
     print("event.session.application.applicationId=" +
           event['session']['application']['applicationId'])
 
-    # if (event['session']['application']['applicationId'] !=
-    #         "amzn1.echo-sdk-ams.app.[unique-value-here]"):
-    #     raise ValueError("Invalid Application ID")
+#    if (event['session']['application']['applicationId'] !=
+#             "amzn1.echo-sdk-ams.app.[unique-value-here]"):
+#         raise ValueError("Invalid Application ID")
 
     if event['session']['new']:
         on_session_started({'requestId': event['request']['requestId']},
@@ -56,8 +56,18 @@ def on_intent(intent_request, session):
         return get_http_status(intent, session)
     elif intent_name == 'AMAZON.HelpIntent':
         return get_welcome_response()
+    elif intent_name == 'AMAZON.CancelIntent' or intent_name == 'AMAZON.StopIntent':
+        return handle_session_end_request()
     else:
         raise ValueError("Invalid intent")
+
+
+def handle_session_end_request():
+    card_title = 'Thank you'
+    speech_output = 'Thank you for using the Web Status Code skill.'
+    should_end_session = True
+
+    return build_response({}, build_speechlet_response(card_title, speech_output, None, should_end_session))
 
 
 def get_welcome_response():
@@ -74,10 +84,8 @@ def get_welcome_response():
 
     should_end_session = False
 
-    return build_response(session_attributes,
-                          build_speechlet_response(
-                              card_title, speech_output,
-                              reprompt_text, should_end_session))
+    return build_response(session_attributes, build_speechlet_response(
+        card_title, speech_output, reprompt_text, should_end_session))
 
 
 def get_http_status(intent, session):
@@ -92,7 +100,7 @@ def get_http_status(intent, session):
 
         session_attributes = {"statusCode": explanation}
 
-        speech_output = "Statuscode " + status_code + " means " + explanation
+        speech_output = "Web status code " + status_code + " means " + explanation
         reprompt_text = 'You can ask me for another HTTP Status code'
 
     else:

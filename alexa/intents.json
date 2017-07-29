@@ -1,13 +1,22 @@
 {
   "intents": [
     {
-      "intent": "WebStatusCode",
       "slots": [
         {
           "name": "StatusCode",
           "type": "AMAZON.NUMBER"
         }
-      ]
+      ],
+      "intent": "WebStatusCode"
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
     }
   ]
 }
