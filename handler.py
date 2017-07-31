@@ -80,7 +80,7 @@ def get_welcome_response():
                     and I will tell you the codes name.
                     """
 
-    reprompt_text = 'Please ask me a HTTP status code for example 403.'
+    reprompt_text = 'Please ask me a HTTP status code, for example 403.'
 
     should_end_session = False
 
@@ -89,22 +89,22 @@ def get_welcome_response():
 
 
 def get_http_status(intent, session):
-    card_title = intent['name']
+    card_title = 'Status code Results'
     session_attributes = {}
     should_end_session = True
 
-    if 'StatusCode' in intent['slots']:
+    if 'StatusCode' in intent['slots'] and 'value' in intent['slots']['StatusCode']:
         status_code = intent['slots']['StatusCode']['value']
 
         explanation = code_mapping(status_code)
 
         session_attributes = {"statusCode": explanation}
 
-        speech_output = "Web status code " + status_code + " means " + explanation
+        speech_output = status_code + ' means ' + explanation
         reprompt_text = 'You can ask me for another HTTP Status code'
 
     else:
-        speech_output = 'I do not know that status code'
+        speech_output = 'I do not know that status code. Please ask me another.'
         reprompt_text = 'You can ask me for other status codes'
 
     return build_response(session_attributes, build_speechlet_response(
@@ -197,8 +197,8 @@ def build_speechlet_response(title, output, reprompt_text, should_end_session):
         },
         'card': {
             'type': 'Simple',
-            'title': 'SessionSpeechlet - ' + title,
-            'content': 'SessionSpeechlet - ' + output
+            'title': title,
+            'content': output
         },
         'reprompt': {
             'outputSpeech': {
