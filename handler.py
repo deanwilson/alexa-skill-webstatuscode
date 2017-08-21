@@ -1,22 +1,25 @@
 
 def alexa_handler(event, context):
+    request = event['request']
+    session = event['session']
+
     print("event.session.application.applicationId=" +
-          event['session']['application']['applicationId'])
+          session['application']['applicationId'])
 
 #    if (event['session']['application']['applicationId'] !=
 #             "amzn1.echo-sdk-ams.app.[unique-value-here]"):
 #         raise ValueError("Invalid Application ID")
 
-    if event['session']['new']:
-        on_session_started({'requestId': event['request']['requestId']},
-                           event['session'])
+    if session['new']:
+        on_session_started({'requestId': request['requestId']},
+                           session)
 
-    if event['request']['type'] == "LaunchRequest":
-        return on_launch(event['request'], event['session'])
-    elif event['request']['type'] == "IntentRequest":
-        return on_intent(event['request'], event['session'])
-    elif event['request']['type'] == "SessionEndedRequest":
-        return on_session_ended(event['request'], event['session'])
+    if request['type'] == "LaunchRequest":
+        return on_launch(request, session)
+    elif request['type'] == "IntentRequest":
+        return on_intent(request, session)
+    elif request['type'] == "SessionEndedRequest":
+        return on_session_ended(request, session)
 
 
 def on_session_started(session_started_request, session):
@@ -56,10 +59,10 @@ def on_intent(intent_request, session):
         return get_http_status(intent, session)
     elif intent_name == 'AMAZON.HelpIntent':
         return get_welcome_response()
-    elif intent_name == 'AMAZON.CancelIntent' or intent_name == 'AMAZON.StopIntent':
+    elif intent_name in ('AMAZON.CancelIntent', 'AMAZON.StopIntent'):
         return handle_session_end_request()
     else:
-        raise ValueError("Invalid intent")
+        raise ValueError('Invalid intent')
 
 
 def handle_session_end_request():
